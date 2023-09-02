@@ -505,4 +505,66 @@ defmodule Passport.AccountsTest do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
     end
   end
+
+  describe "profiles" do
+    alias Passport.Accounts.Profile
+
+    import Passport.AccountsFixtures
+
+    @invalid_attrs %{name: nil, phone_number: nil, zip_code: nil, born_date: nil, last_name: nil}
+
+    test "list_profiles/0 returns all profiles" do
+      profile = profile_fixture()
+      assert Accounts.list_profiles() == [profile]
+    end
+
+    test "get_profile!/1 returns the profile with given id" do
+      profile = profile_fixture()
+      assert Accounts.get_profile!(profile.id) == profile
+    end
+
+    test "create_profile/1 with valid data creates a profile" do
+      valid_attrs = %{name: "some name", phone_number: "some phone_number", zip_code: "some zip_code", born_date: ~D[2023-09-01], last_name: "some last_name"}
+
+      assert {:ok, %Profile{} = profile} = Accounts.create_profile(valid_attrs)
+      assert profile.name == "some name"
+      assert profile.phone_number == "some phone_number"
+      assert profile.zip_code == "some zip_code"
+      assert profile.born_date == ~D[2023-09-01]
+      assert profile.last_name == "some last_name"
+    end
+
+    test "create_profile/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_profile(@invalid_attrs)
+    end
+
+    test "update_profile/2 with valid data updates the profile" do
+      profile = profile_fixture()
+      update_attrs = %{name: "some updated name", phone_number: "some updated phone_number", zip_code: "some updated zip_code", born_date: ~D[2023-09-02], last_name: "some updated last_name"}
+
+      assert {:ok, %Profile{} = profile} = Accounts.update_profile(profile, update_attrs)
+      assert profile.name == "some updated name"
+      assert profile.phone_number == "some updated phone_number"
+      assert profile.zip_code == "some updated zip_code"
+      assert profile.born_date == ~D[2023-09-02]
+      assert profile.last_name == "some updated last_name"
+    end
+
+    test "update_profile/2 with invalid data returns error changeset" do
+      profile = profile_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_profile(profile, @invalid_attrs)
+      assert profile == Accounts.get_profile!(profile.id)
+    end
+
+    test "delete_profile/1 deletes the profile" do
+      profile = profile_fixture()
+      assert {:ok, %Profile{}} = Accounts.delete_profile(profile)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_profile!(profile.id) end
+    end
+
+    test "change_profile/1 returns a profile changeset" do
+      profile = profile_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_profile(profile)
+    end
+  end
 end

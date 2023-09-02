@@ -28,4 +28,22 @@ defmodule Passport.AccountsFixtures do
     [_, token | _] = String.split(captured_email.text_body, "[TOKEN]")
     token
   end
+
+  @doc """
+  Generate a profile.
+  """
+  def profile_fixture(attrs \\ %{}) do
+    {:ok, profile} =
+      attrs
+      |> Enum.into(%{
+        name: "some name",
+        phone_number: "some phone_number",
+        zip_code: "some zip_code",
+        born_date: ~D[2023-09-01],
+        last_name: "some last_name"
+      })
+      |> Passport.Accounts.create_profile()
+
+    profile
+  end
 end
