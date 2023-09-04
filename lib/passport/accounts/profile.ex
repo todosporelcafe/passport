@@ -10,13 +10,21 @@ defmodule Passport.Accounts.Profile do
     field :zip_code, :string
     field :born_date, :date
     field :last_name, :string
-    field :user_id, :binary_id
+
+    belongs_to :user, Passport.Accounts.User
 
     timestamps()
   end
 
   @doc false
   def changeset(profile, attrs) do
+    profile
+    |> cast(attrs, [:phone_number, :zip_code, :born_date, :name, :last_name])
+    |> validate_required([:phone_number, :zip_code, :born_date, :name, :last_name])
+  end
+
+  @doc false
+  def registration_changeset(profile, attrs) do
     profile
     |> cast(attrs, [:phone_number, :zip_code, :born_date, :name, :last_name])
     |> validate_required([:phone_number, :zip_code, :born_date, :name, :last_name])
