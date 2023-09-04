@@ -1,6 +1,7 @@
 defmodule Passport.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Passport.Accounts.Profile
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do
@@ -8,6 +9,8 @@ defmodule Passport.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+
+    has_one :profile, Passport.Accounts.Profile
 
     timestamps()
   end
@@ -40,6 +43,7 @@ defmodule Passport.Accounts.User do
     |> cast(attrs, [:email, :password])
     |> validate_email(opts)
     |> validate_password(opts)
+    |> cast_assoc(:profile, required: true, with: &Profile.registration_changeset/2)
   end
 
   defp validate_email(changeset, opts) do
