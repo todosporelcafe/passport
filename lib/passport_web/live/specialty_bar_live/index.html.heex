@@ -1,0 +1,46 @@
+<.header>
+  Listing Specialty bars
+  <:actions>
+    <.link patch={~p"/specialty_bars/new"}>
+      <.button>New Specialty bar</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="specialty_bars"
+  rows={@streams.specialty_bars}
+  row_click={fn {_id, specialty_bar} -> JS.navigate(~p"/specialty_bars/#{specialty_bar}") end}
+>
+  <:col :let={{_id, specialty_bar}} label="Name"><%= specialty_bar.name %></:col>
+  <:col :let={{_id, specialty_bar}} label="Address"><%= specialty_bar.address %></:col>
+  <:col :let={{_id, specialty_bar}} label="Instagram"><%= specialty_bar.instagram %></:col>
+  <:col :let={{_id, specialty_bar}} label="Tiktok"><%= specialty_bar.tiktok %></:col>
+  <:col :let={{_id, specialty_bar}} label="Facebook"><%= specialty_bar.facebook %></:col>
+  <:col :let={{_id, specialty_bar}} label="Description"><%= specialty_bar.description %></:col>
+  <:action :let={{_id, specialty_bar}}>
+    <div class="sr-only">
+      <.link navigate={~p"/specialty_bars/#{specialty_bar}"}>Show</.link>
+    </div>
+    <.link patch={~p"/specialty_bars/#{specialty_bar}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, specialty_bar}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: specialty_bar.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="specialty_bar-modal" show on_cancel={JS.patch(~p"/specialty_bars")}>
+  <.live_component
+    module={PassportWeb.SpecialtyBarLive.FormComponent}
+    id={@specialty_bar.id || :new}
+    title={@page_title}
+    action={@live_action}
+    specialty_bar={@specialty_bar}
+    patch={~p"/specialty_bars"}
+  />
+</.modal>

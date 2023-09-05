@@ -1,0 +1,31 @@
+<.header>
+  Specialty bar <%= @specialty_bar.id %>
+  <:subtitle>This is a specialty_bar record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/specialty_bars/#{@specialty_bar}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit specialty_bar</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @specialty_bar.name %></:item>
+  <:item title="Address"><%= @specialty_bar.address %></:item>
+  <:item title="Instagram"><%= @specialty_bar.instagram %></:item>
+  <:item title="Tiktok"><%= @specialty_bar.tiktok %></:item>
+  <:item title="Facebook"><%= @specialty_bar.facebook %></:item>
+  <:item title="Description"><%= @specialty_bar.description %></:item>
+</.list>
+
+<.back navigate={~p"/specialty_bars"}>Back to specialty_bars</.back>
+
+<.modal :if={@live_action == :edit} id="specialty_bar-modal" show on_cancel={JS.patch(~p"/specialty_bars/#{@specialty_bar}")}>
+  <.live_component
+    module={PassportWeb.SpecialtyBarLive.FormComponent}
+    id={@specialty_bar.id}
+    title={@page_title}
+    action={@live_action}
+    specialty_bar={@specialty_bar}
+    patch={~p"/specialty_bars/#{@specialty_bar}"}
+  />
+</.modal>
