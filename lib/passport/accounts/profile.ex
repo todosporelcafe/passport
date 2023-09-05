@@ -8,7 +8,7 @@ defmodule Passport.Accounts.Profile do
     field :name, :string
     field :phone_number, :string
     field :zip_code, :string
-    field :born_date, :date
+    field :born_date, :date, default: Date.utc_today() |> Date.add(-18 * 365)
     field :last_name, :string
 
     belongs_to :user, Passport.Accounts.User
