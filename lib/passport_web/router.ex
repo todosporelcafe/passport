@@ -70,6 +70,13 @@ defmodule PassportWeb.Router do
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
 
       live "/my_profile", ProfileLive.Index, :index
+
+      live "/specialty_bars", SpecialtyBarLive.Index, :index
+      live "/specialty_bars/new", SpecialtyBarLive.Index, :new
+      live "/specialty_bars/:id/edit", SpecialtyBarLive.Index, :edit
+
+      live "/specialty_bars/:id", SpecialtyBarLive.Show, :show
+      live "/specialty_bars/:id/show/edit", SpecialtyBarLive.Show, :edit
     end
   end
 
