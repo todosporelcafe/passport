@@ -28,7 +28,17 @@ defmodule PassportWeb.ProfileLive.Index do
 
   @impl true
   def handle_event("save", %{"profile" => profile_params}, socket) do
-    IO.inspect(binding())
+    socket.assigns.current_user
+    |> Accounts.create_profile(profile_params)
+    |> case do
+      {:ok, _profile} ->
+        info = "We've update your profile"
+        {:noreply, socket |> put_flash(:info, info) |> redirect(~p"/specialty-bars")}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, form: to_form(changeset))}
+    end
+
     {:noreply, socket}
   end
 end
