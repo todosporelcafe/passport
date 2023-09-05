@@ -394,9 +394,9 @@ defmodule Passport.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_profile(attrs \\ %{}) do
-    %Profile{}
-    |> Profile.changeset(attrs)
+  def create_profile(user, attrs \\ %{}) do
+    user
+    |> Profile.profile_registration_changeset(attrs)
     |> Repo.insert()
   end
 

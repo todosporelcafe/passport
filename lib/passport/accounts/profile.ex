@@ -19,14 +19,22 @@ defmodule Passport.Accounts.Profile do
   @doc false
   def changeset(profile, attrs) do
     profile
-    |> cast(attrs, [:phone_number, :zip_code, :born_date, :name, :last_name])
-    |> validate_required([:phone_number, :zip_code, :born_date, :name, :last_name])
+    |> common_validations(attrs)
   end
 
   @doc false
-  def registration_changeset(profile, attrs) do
+  def profile_registration_changeset(user, attrs) do
+    user
+    |> Ecto.build_assoc(:profile)
+    |> common_validations(attrs)
+  end
+
+  defp common_validations(profile, attrs) do
     profile
     |> cast(attrs, [:phone_number, :zip_code, :born_date, :name, :last_name])
     |> validate_required([:phone_number, :zip_code, :born_date, :name, :last_name])
+    |> validate_format(:zip_code, ~r/^\d{5}$/)
+    |> validate_format(:phone_number, ~r/^\d{10}$/)
+    |> foreign_key_constraint(:user_id)
   end
 end
