@@ -7,7 +7,7 @@ defmodule PassportWeb.UserSessionController do
   def create(conn, %{"_action" => "registered"} = params) do
     conn
     |> put_session(:user_return_to, ~p"/my_profile")
-    |> create(params, "Password updated successfully!")
+    |> create(params, "Account created successfully")
   end
 
   def create(conn, %{"_action" => "password_updated"} = params) do
