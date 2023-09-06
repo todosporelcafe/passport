@@ -32,17 +32,20 @@ defmodule Passport.AccountsFixtures do
   @doc """
   Generate a profile.
   """
-  def profile_fixture(attrs \\ %{}) do
-    {:ok, profile} =
+  def profile_fixture(user, attrs \\ %{}) do
+    attrs =
       attrs
       |> Enum.into(%{
         name: "some name",
-        phone_number: "some phone_number",
-        zip_code: "some zip_code",
+        phone_number: "1234567890",
+        zip_code: "00000",
         born_date: ~D[2023-09-01],
         last_name: "some last_name"
       })
-      |> Passport.Accounts.create_profile()
+
+    {:ok, profile} =
+      user
+      |> Passport.Accounts.create_profile(attrs)
 
     profile
   end
