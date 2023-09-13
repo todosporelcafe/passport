@@ -77,6 +77,7 @@ defmodule PassportWeb.Router do
 
       live "/specialty_bars/:id", SpecialtyBarLive.Show, :show
       live "/specialty_bars/:id/show/edit", SpecialtyBarLive.Show, :edit
+      live "/passport", PassportLive.Index, :index
     end
   end
 
