@@ -3,18 +3,46 @@ defmodule PassportWeb.SpecialtyBarLiveTest do
 
   import Phoenix.LiveViewTest
   import Passport.TourFixtures
+  import Passport.AccountsFixtures
 
-  @create_attrs %{name: "some name", address: "some address", description: "some description", instagram: "some instagram", tiktok: "some tiktok", facebook: "some facebook"}
-  @update_attrs %{name: "some updated name", address: "some updated address", description: "some updated description", instagram: "some updated instagram", tiktok: "some updated tiktok", facebook: "some updated facebook"}
-  @invalid_attrs %{name: nil, address: nil, description: nil, instagram: nil, tiktok: nil, facebook: nil}
+  @create_attrs %{
+    name: "some name",
+    address: "some address",
+    description: "some description",
+    instagram: "some instagram",
+    tiktok: "some tiktok",
+    facebook: "some facebook"
+  }
+  @update_attrs %{
+    name: "some updated name",
+    address: "some updated address",
+    description: "some updated description",
+    instagram: "some updated instagram",
+    tiktok: "some updated tiktok",
+    facebook: "some updated facebook"
+  }
+  @invalid_attrs %{
+    name: nil,
+    address: nil,
+    description: nil,
+    instagram: nil,
+    tiktok: nil,
+    facebook: nil
+  }
 
   defp create_specialty_bar(_) do
     specialty_bar = specialty_bar_fixture()
     %{specialty_bar: specialty_bar}
   end
 
+  defp login_user(%{conn: conn}) do
+    password = valid_user_password()
+    user = user_fixture(%{password: password})
+    %{conn: log_in_user(conn, user), user: user, password: password}
+  end
+
   describe "Index" do
-    setup [:create_specialty_bar]
+    setup [:create_specialty_bar, :login_user]
 
     test "lists all specialty_bars", %{conn: conn, specialty_bar: specialty_bar} do
       {:ok, _index_live, html} = live(conn, ~p"/specialty_bars")
@@ -49,7 +77,9 @@ defmodule PassportWeb.SpecialtyBarLiveTest do
     test "updates specialty_bar in listing", %{conn: conn, specialty_bar: specialty_bar} do
       {:ok, index_live, _html} = live(conn, ~p"/specialty_bars")
 
-      assert index_live |> element("#specialty_bars-#{specialty_bar.id} a", "Edit") |> render_click() =~
+      assert index_live
+             |> element("#specialty_bars-#{specialty_bar.id} a", "Edit")
+             |> render_click() =~
                "Edit Specialty bar"
 
       assert_patch(index_live, ~p"/specialty_bars/#{specialty_bar}/edit")
@@ -72,13 +102,16 @@ defmodule PassportWeb.SpecialtyBarLiveTest do
     test "deletes specialty_bar in listing", %{conn: conn, specialty_bar: specialty_bar} do
       {:ok, index_live, _html} = live(conn, ~p"/specialty_bars")
 
-      assert index_live |> element("#specialty_bars-#{specialty_bar.id} a", "Delete") |> render_click()
+      assert index_live
+             |> element("#specialty_bars-#{specialty_bar.id} a", "Delete")
+             |> render_click()
+
       refute has_element?(index_live, "#specialty_bars-#{specialty_bar.id}")
     end
   end
 
   describe "Show" do
-    setup [:create_specialty_bar]
+    setup [:create_specialty_bar, :login_user]
 
     test "displays specialty_bar", %{conn: conn, specialty_bar: specialty_bar} do
       {:ok, _show_live, html} = live(conn, ~p"/specialty_bars/#{specialty_bar}")
