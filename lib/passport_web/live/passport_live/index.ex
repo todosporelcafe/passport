@@ -1,0 +1,7 @@
+defmodule PassportWeb.PassportLive.Index do
+  use PassportWeb, :live_view
+
+  def mount(_params, _session, socket) do
+    {:ok, socket}
+  end
+end
