@@ -1,7 +1,7 @@
 defmodule PassportWeb.PassportLive.Index do
   use PassportWeb, :live_view
 
-  def mount(_params, _session, socket) do
+  def mount(params, session, socket) do
     {:ok,
      socket
      |> assign(:uploaded_files, [])
@@ -19,12 +19,16 @@ defmodule PassportWeb.PassportLive.Index do
 
   def handle_event("save", _params, socket) do
     uploaded_files =
-      consume_uploaded_entries(socket, :passport, fn %{path: path}, _entry ->
-        dest = Path.join([:code.priv_dir(:passport), "static", "uploads", Path.basename(path)])
+      consume_uploaded_entries(socket, :passport, fn %{path: path},
+                                                     %Phoenix.LiveView.UploadEntry{
+                                                       client_name: client_name
+                                                     } ->
+        dest = Path.join([:code.priv_dir(:passport), "static", "uploads", client_name])
         # The `static/uploads` directory must exist for `File.cp!/2`
         # and MyAppWeb.static_paths/0 should contain uploads to work,.
+
         File.cp!(path, dest)
-        {:ok, ~p"/uploads/#{Path.basename(dest)}"}
+        {:ok, ~p"/uploads/#{dest}"}
       end)
 
     {:noreply, update(socket, :uploaded_files, &(&1 ++ uploaded_files))}
