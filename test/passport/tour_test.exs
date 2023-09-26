@@ -8,7 +8,14 @@ defmodule Passport.TourTest do
 
     import Passport.TourFixtures
 
-    @invalid_attrs %{name: nil, address: nil, description: nil, instagram: nil, tiktok: nil, facebook: nil}
+    @invalid_attrs %{
+      name: nil,
+      address: nil,
+      description: nil,
+      instagram: nil,
+      tiktok: nil,
+      facebook: nil
+    }
 
     test "list_specialty_bars/0 returns all specialty_bars" do
       specialty_bar = specialty_bar_fixture()
@@ -21,7 +28,14 @@ defmodule Passport.TourTest do
     end
 
     test "create_specialty_bar/1 with valid data creates a specialty_bar" do
-      valid_attrs = %{name: "some name", address: "some address", description: "some description", instagram: "some instagram", tiktok: "some tiktok", facebook: "some facebook"}
+      valid_attrs = %{
+        name: "some name",
+        address: "some address",
+        description: "some description",
+        instagram: "some instagram",
+        tiktok: "some tiktok",
+        facebook: "some facebook"
+      }
 
       assert {:ok, %SpecialtyBar{} = specialty_bar} = Tour.create_specialty_bar(valid_attrs)
       assert specialty_bar.name == "some name"
@@ -38,9 +52,19 @@ defmodule Passport.TourTest do
 
     test "update_specialty_bar/2 with valid data updates the specialty_bar" do
       specialty_bar = specialty_bar_fixture()
-      update_attrs = %{name: "some updated name", address: "some updated address", description: "some updated description", instagram: "some updated instagram", tiktok: "some updated tiktok", facebook: "some updated facebook"}
 
-      assert {:ok, %SpecialtyBar{} = specialty_bar} = Tour.update_specialty_bar(specialty_bar, update_attrs)
+      update_attrs = %{
+        name: "some updated name",
+        address: "some updated address",
+        description: "some updated description",
+        instagram: "some updated instagram",
+        tiktok: "some updated tiktok",
+        facebook: "some updated facebook"
+      }
+
+      assert {:ok, %SpecialtyBar{} = specialty_bar} =
+               Tour.update_specialty_bar(specialty_bar, update_attrs)
+
       assert specialty_bar.name == "some updated name"
       assert specialty_bar.address == "some updated address"
       assert specialty_bar.description == "some updated description"
@@ -51,7 +75,10 @@ defmodule Passport.TourTest do
 
     test "update_specialty_bar/2 with invalid data returns error changeset" do
       specialty_bar = specialty_bar_fixture()
-      assert {:error, %Ecto.Changeset{}} = Tour.update_specialty_bar(specialty_bar, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Tour.update_specialty_bar(specialty_bar, @invalid_attrs)
+
       assert specialty_bar == Tour.get_specialty_bar!(specialty_bar.id)
     end
 
@@ -71,50 +98,73 @@ defmodule Passport.TourTest do
     alias Passport.Tour.Checkin
 
     import Passport.TourFixtures
+    import Passport.AccountsFixtures
 
-    @invalid_attrs %{}
+    @invalid_attrs %{"specialty_bar_id" => -1, "user_id" => -1}
 
-    test "list_checkins/0 returns all checkins" do
-      checkin = checkin_fixture()
+    setup do
+      %{user: user_fixture(), specialty_bar: specialty_bar_fixture()}
+    end
+
+    test "list_checkins/0 returns all checkins", %{user: user, specialty_bar: specialty_bar} do
+      checkin = checkin_fixture(%{"user_id" => user.id, "specialty_bar_id" => specialty_bar.id})
       assert Tour.list_checkins() == [checkin]
     end
 
-    test "get_checkin!/1 returns the checkin with given id" do
-      checkin = checkin_fixture()
+    test "get_checkin!/1 returns the checkin with given id", %{
+      user: user,
+      specialty_bar: specialty_bar
+    } do
+      checkin = checkin_fixture(%{"user_id" => user.id, "specialty_bar_id" => specialty_bar.id})
       assert Tour.get_checkin!(checkin.id) == checkin
     end
 
-    test "create_checkin/1 with valid data creates a checkin" do
-      valid_attrs = %{}
+    test "create_checkin/1 with valid data creates a checkin", %{
+      user: user,
+      specialty_bar: specialty_bar
+    } do
+      valid_attrs = %{"user_id" => user.id, "specialty_bar_id" => specialty_bar.id}
 
-      assert {:ok, %Checkin{} = checkin} = Tour.create_checkin(valid_attrs)
+      assert {:ok, %Checkin{} = _checkin} = Tour.create_checkin(valid_attrs)
     end
 
     test "create_checkin/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Tour.create_checkin(@invalid_attrs)
     end
 
-    test "update_checkin/2 with valid data updates the checkin" do
-      checkin = checkin_fixture()
-      update_attrs = %{}
+    test "update_checkin/2 with valid data updates the checkin", %{
+      user: user,
+      specialty_bar: specialty_bar
+    } do
+      checkin = checkin_fixture(%{"user_id" => user.id, "specialty_bar_id" => specialty_bar.id})
+      update_attrs = %{"specialty_bar_id" => specialty_bar_fixture().id}
 
-      assert {:ok, %Checkin{} = checkin} = Tour.update_checkin(checkin, update_attrs)
+      assert {:ok, %Checkin{} = _checkin} = Tour.update_checkin(checkin, update_attrs)
     end
 
-    test "update_checkin/2 with invalid data returns error changeset" do
-      checkin = checkin_fixture()
+    test "update_checkin/2 with invalid data returns error changeset", %{
+      user: user,
+      specialty_bar: specialty_bar
+    } do
+      checkin = checkin_fixture(%{"user_id" => user.id, "specialty_bar_id" => specialty_bar.id})
       assert {:error, %Ecto.Changeset{}} = Tour.update_checkin(checkin, @invalid_attrs)
       assert checkin == Tour.get_checkin!(checkin.id)
     end
 
-    test "delete_checkin/1 deletes the checkin" do
-      checkin = checkin_fixture()
+    test "delete_checkin/1 deletes the checkin", %{
+      user: user,
+      specialty_bar: specialty_bar
+    } do
+      checkin = checkin_fixture(%{"user_id" => user.id, "specialty_bar_id" => specialty_bar.id})
       assert {:ok, %Checkin{}} = Tour.delete_checkin(checkin)
       assert_raise Ecto.NoResultsError, fn -> Tour.get_checkin!(checkin.id) end
     end
 
-    test "change_checkin/1 returns a checkin changeset" do
-      checkin = checkin_fixture()
+    test "change_checkin/1 returns a checkin changeset", %{
+      user: user,
+      specialty_bar: specialty_bar
+    } do
+      checkin = checkin_fixture(%{"user_id" => user.id, "specialty_bar_id" => specialty_bar.id})
       assert %Ecto.Changeset{} = Tour.change_checkin(checkin)
     end
   end

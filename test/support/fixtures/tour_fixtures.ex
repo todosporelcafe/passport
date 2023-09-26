@@ -29,9 +29,7 @@ defmodule Passport.TourFixtures do
   def checkin_fixture(attrs \\ %{}) do
     {:ok, checkin} =
       attrs
-      |> Enum.into(%{
-
-      })
+      |> Enum.into(%{})
       |> Passport.Tour.create_checkin()
 
     checkin
