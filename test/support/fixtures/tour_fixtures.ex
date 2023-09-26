@@ -22,4 +22,18 @@ defmodule Passport.TourFixtures do
 
     specialty_bar
   end
+
+  @doc """
+  Generate a checkin.
+  """
+  def checkin_fixture(attrs \\ %{}) do
+    {:ok, checkin} =
+      attrs
+      |> Enum.into(%{
+
+      })
+      |> Passport.Tour.create_checkin()
+
+    checkin
+  end
 end

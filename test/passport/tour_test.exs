@@ -66,4 +66,56 @@ defmodule Passport.TourTest do
       assert %Ecto.Changeset{} = Tour.change_specialty_bar(specialty_bar)
     end
   end
+
+  describe "checkins" do
+    alias Passport.Tour.Checkin
+
+    import Passport.TourFixtures
+
+    @invalid_attrs %{}
+
+    test "list_checkins/0 returns all checkins" do
+      checkin = checkin_fixture()
+      assert Tour.list_checkins() == [checkin]
+    end
+
+    test "get_checkin!/1 returns the checkin with given id" do
+      checkin = checkin_fixture()
+      assert Tour.get_checkin!(checkin.id) == checkin
+    end
+
+    test "create_checkin/1 with valid data creates a checkin" do
+      valid_attrs = %{}
+
+      assert {:ok, %Checkin{} = checkin} = Tour.create_checkin(valid_attrs)
+    end
+
+    test "create_checkin/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Tour.create_checkin(@invalid_attrs)
+    end
+
+    test "update_checkin/2 with valid data updates the checkin" do
+      checkin = checkin_fixture()
+      update_attrs = %{}
+
+      assert {:ok, %Checkin{} = checkin} = Tour.update_checkin(checkin, update_attrs)
+    end
+
+    test "update_checkin/2 with invalid data returns error changeset" do
+      checkin = checkin_fixture()
+      assert {:error, %Ecto.Changeset{}} = Tour.update_checkin(checkin, @invalid_attrs)
+      assert checkin == Tour.get_checkin!(checkin.id)
+    end
+
+    test "delete_checkin/1 deletes the checkin" do
+      checkin = checkin_fixture()
+      assert {:ok, %Checkin{}} = Tour.delete_checkin(checkin)
+      assert_raise Ecto.NoResultsError, fn -> Tour.get_checkin!(checkin.id) end
+    end
+
+    test "change_checkin/1 returns a checkin changeset" do
+      checkin = checkin_fixture()
+      assert %Ecto.Changeset{} = Tour.change_checkin(checkin)
+    end
+  end
 end
