@@ -197,4 +197,100 @@ defmodule Passport.Tour do
   def change_checkin(%Checkin{} = checkin, attrs \\ %{}) do
     Checkin.changeset(checkin, attrs)
   end
+
+  alias Passport.Tour.PhysicalDocument
+
+  @doc """
+  Returns the list of physical_documents.
+
+  ## Examples
+
+      iex> list_physical_documents()
+      [%PhysicalDocument{}, ...]
+
+  """
+  def list_physical_documents do
+    Repo.all(PhysicalDocument)
+  end
+
+  @doc """
+  Gets a single physical_document.
+
+  Raises `Ecto.NoResultsError` if the Physical document does not exist.
+
+  ## Examples
+
+      iex> get_physical_document!(123)
+      %PhysicalDocument{}
+
+      iex> get_physical_document!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_physical_document!(id), do: Repo.get!(PhysicalDocument, id)
+
+  @doc """
+  Creates a physical_document.
+
+  ## Examples
+
+      iex> create_physical_document(%{field: value})
+      {:ok, %PhysicalDocument{}}
+
+      iex> create_physical_document(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_physical_document(attrs \\ %{}) do
+    %PhysicalDocument{}
+    |> PhysicalDocument.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a physical_document.
+
+  ## Examples
+
+      iex> update_physical_document(physical_document, %{field: new_value})
+      {:ok, %PhysicalDocument{}}
+
+      iex> update_physical_document(physical_document, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_physical_document(%PhysicalDocument{} = physical_document, attrs) do
+    physical_document
+    |> PhysicalDocument.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a physical_document.
+
+  ## Examples
+
+      iex> delete_physical_document(physical_document)
+      {:ok, %PhysicalDocument{}}
+
+      iex> delete_physical_document(physical_document)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_physical_document(%PhysicalDocument{} = physical_document) do
+    Repo.delete(physical_document)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking physical_document changes.
+
+  ## Examples
+
+      iex> change_physical_document(physical_document)
+      %Ecto.Changeset{data: %PhysicalDocument{}}
+
+  """
+  def change_physical_document(%PhysicalDocument{} = physical_document, attrs \\ %{}) do
+    PhysicalDocument.changeset(physical_document, attrs)
+  end
 end
