@@ -33,7 +33,7 @@ defmodule PassportWeb.ProfileLive.Index do
     |> case do
       {:ok, _profile} ->
         info = "We've update your profile"
-        {:noreply, socket |> put_flash(:info, info) |> redirect(~p"/specialty_bars")}
+        {:noreply, socket |> put_flash(:info, info) |> redirect(to: ~p"/specialty_bars")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}
