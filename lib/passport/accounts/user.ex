@@ -10,6 +10,7 @@ defmodule Passport.Accounts.User do
     field :confirmed_at, :naive_datetime
 
     has_one :profile, Passport.Accounts.Profile
+    has_one :physical_document, Passport.Tour.PhysicalDocument
 
     timestamps()
   end

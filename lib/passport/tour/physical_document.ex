@@ -6,9 +6,16 @@ defmodule Passport.Tour.PhysicalDocument do
   @foreign_key_type :binary_id
   schema "physical_documents" do
     field :identifier, :string
-    field :user_id, :binary_id
+
+    belongs_to :user, Passport.Accounts.User
 
     timestamps()
+  end
+
+  def physical_document_registration_changeset(user, attrs) do
+    user
+    |> Ecto.build_assoc(:physical_documents)
+    |> changeset(attrs)
   end
 
   @doc false
@@ -16,5 +23,6 @@ defmodule Passport.Tour.PhysicalDocument do
     physical_document
     |> cast(attrs, [:identifier])
     |> validate_required([:identifier])
+    |> assoc_constraint(:user)
   end
 end
