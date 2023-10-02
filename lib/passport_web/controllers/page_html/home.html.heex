@@ -1,6 +1,5 @@
 <.flash_group flash={@flash} />
-<div class="left-[40rem] fixed inset-y-0 right-0 z-0 hidden lg:block xl:left-[50rem]">
-</div>
+<div class="left-[40rem] fixed inset-y-0 right-0 z-0 hidden lg:block xl:left-[50rem]"></div>
 <div class="px-4 py-10 sm:px-6 sm:py-28 lg:px-8 xl:px-28 xl:py-32">
   <div class="mx-auto max-w-xl lg:mx-0">
     <h1 class="text-brand mt-10 flex items-center text-sm font-semibold leading-6">
@@ -10,13 +9,12 @@
       </small>
     </h1>
     <p class="mt-4 text-base leading-7 text-zinc-600">
-    <%= if @current_user do %>
-      <%= @current_user.email %>
-    <% end %>
+      <%= if @current_user do %>
+        <%= @current_user.email %>
+      <% end %>
     </p>
     <div class="flex">
-      <div class="w-full sm:w-auto">
-      </div>
+      <div class="w-full sm:w-auto"></div>
     </div>
   </div>
 </div>

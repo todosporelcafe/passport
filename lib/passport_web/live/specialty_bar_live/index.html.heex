@@ -34,7 +34,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="specialty_bar-modal" show on_cancel={JS.patch(~p"/specialty_bars")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="specialty_bar-modal"
+  show
+  on_cancel={JS.patch(~p"/specialty_bars")}
+>
   <.live_component
     module={PassportWeb.SpecialtyBarLive.FormComponent}
     id={@specialty_bar.id || :new}

@@ -19,7 +19,12 @@
 
 <.back navigate={~p"/specialty_bars"}>Back to specialty_bars</.back>
 
-<.modal :if={@live_action == :edit} id="specialty_bar-modal" show on_cancel={JS.patch(~p"/specialty_bars/#{@specialty_bar}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="specialty_bar-modal"
+  show
+  on_cancel={JS.patch(~p"/specialty_bars/#{@specialty_bar}")}
+>
   <.live_component
     module={PassportWeb.SpecialtyBarLive.FormComponent}
     id={@specialty_bar.id}
