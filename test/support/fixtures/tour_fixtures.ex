@@ -34,4 +34,18 @@ defmodule Passport.TourFixtures do
 
     checkin
   end
+
+  @doc """
+  Generate a physical_document.
+  """
+  def physical_document_fixture(attrs \\ %{}) do
+    {:ok, physical_document} =
+      attrs
+      |> Enum.into(%{
+        identifier: "some identifier"
+      })
+      |> Passport.Tour.create_physical_document()
+
+    physical_document
+  end
 end

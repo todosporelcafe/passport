@@ -168,4 +168,68 @@ defmodule Passport.TourTest do
       assert %Ecto.Changeset{} = Tour.change_checkin(checkin)
     end
   end
+
+  describe "physical_documents" do
+    alias Passport.Tour.PhysicalDocument
+
+    import Passport.TourFixtures
+
+    @invalid_attrs %{identifier: nil}
+
+    test "list_physical_documents/0 returns all physical_documents" do
+      physical_document = physical_document_fixture()
+      assert Tour.list_physical_documents() == [physical_document]
+    end
+
+    test "get_physical_document!/1 returns the physical_document with given id" do
+      physical_document = physical_document_fixture()
+      assert Tour.get_physical_document!(physical_document.id) == physical_document
+    end
+
+    test "create_physical_document/1 with valid data creates a physical_document" do
+      valid_attrs = %{identifier: "some identifier"}
+
+      assert {:ok, %PhysicalDocument{} = physical_document} =
+               Tour.create_physical_document(valid_attrs)
+
+      assert physical_document.identifier == "some identifier"
+    end
+
+    test "create_physical_document/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Tour.create_physical_document(@invalid_attrs)
+    end
+
+    test "update_physical_document/2 with valid data updates the physical_document" do
+      physical_document = physical_document_fixture()
+      update_attrs = %{identifier: "some updated identifier"}
+
+      assert {:ok, %PhysicalDocument{} = physical_document} =
+               Tour.update_physical_document(physical_document, update_attrs)
+
+      assert physical_document.identifier == "some updated identifier"
+    end
+
+    test "update_physical_document/2 with invalid data returns error changeset" do
+      physical_document = physical_document_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Tour.update_physical_document(physical_document, @invalid_attrs)
+
+      assert physical_document == Tour.get_physical_document!(physical_document.id)
+    end
+
+    test "delete_physical_document/1 deletes the physical_document" do
+      physical_document = physical_document_fixture()
+      assert {:ok, %PhysicalDocument{}} = Tour.delete_physical_document(physical_document)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Tour.get_physical_document!(physical_document.id)
+      end
+    end
+
+    test "change_physical_document/1 returns a physical_document changeset" do
+      physical_document = physical_document_fixture()
+      assert %Ecto.Changeset{} = Tour.change_physical_document(physical_document)
+    end
+  end
 end
