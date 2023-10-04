@@ -23,6 +23,7 @@ defmodule Passport.Tour.PhysicalDocument do
     physical_document
     |> cast(attrs, [:identifier])
     |> validate_required([:identifier])
+    |> validate_format(:identifier, ~r/^\d{6}$/)
     |> assoc_constraint(:user)
   end
 end
