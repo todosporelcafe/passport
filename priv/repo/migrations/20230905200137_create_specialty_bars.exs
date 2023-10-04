@@ -9,7 +9,7 @@ defmodule Passport.Repo.Migrations.CreateSpecialtyBars do
       add :instagram, :string
       add :tiktok, :string
       add :facebook, :string
-      add :description, :string
+      add :description, :string, size: 1_500
 
       timestamps()
     end
