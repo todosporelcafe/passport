@@ -13,19 +13,22 @@
 alias Passport.Repo
 alias Passport.Tour.SpecialtyBar
 
+#Repo.delete_all(SpecialtyBar)
 
 File.read!("specialty_bars_info.csv")
+|> String.replace("\n", "")
 |> String.split("\r", trim: true)
 |> Enum.map(&String.split(&1, "|"))
-|> Enum.map(fn list = [name, addres, description, instagram, tiktok, facebook] ->
-  Repo.insert!(%SpecialtyBar{
-    name: name,
-    address: addres,
-    description: description,
-    instagram: instagram,
-    tiktok: tiktok,
-    facebook: facebook
-  })
+|> Enum.map(fn [name, addres, description, instagram, tiktok, facebook] ->
+  Repo.get_by(SpecialtyBar, name: name) ||
+    Repo.insert!(%SpecialtyBar{
+      name: name,
+      address: addres,
+      description: description,
+      instagram: instagram,
+      tiktok: tiktok,
+      facebook: facebook
+    })
 end)
 
 
