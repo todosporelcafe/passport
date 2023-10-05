@@ -1,5 +1,11 @@
-<h1>Pasaporte de <b><%= @current_user.email %></b></h1>
+<.header>
+  Pasaporte de <b><%= @current_user.email %></b>
+</.header>
 
+<.simple_form for={@form} id="physical-documen-form" phx-change="validate" phx-submit="validate">
+  <.input type="text" field={@form[:serie]} label="Serie" inputmode="numeric" pattern="[0-9]*" />
+  <.input type="text" field={@form[:img_url]} label="img url" />
+</.simple_form>
 <form id="upload-form" phx-submit="save" phx-change="validate">
   <label for="serial">Serie:</label>
   <input type="text" name="serie" inputmode="numeric" pattern="[0-9]*">
