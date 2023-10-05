@@ -1,7 +1,7 @@
 defmodule PassportWeb.PassportLive.Index do
   use PassportWeb, :live_view
 
-  def mount(params, session, socket) do
+  def mount(_params, _session, socket) do
     {:ok,
      socket
      |> assign(:uploaded_files, [])

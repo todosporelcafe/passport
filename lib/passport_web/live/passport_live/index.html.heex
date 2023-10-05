@@ -1,6 +1,10 @@
-<h1>Hola pasaporte extraño vim</h1>
+<h1>Pasaporte de <b><%= @current_user.email %></b></h1>
 
 <form id="upload-form" phx-submit="save" phx-change="validate">
+  <label for="serial">Serie:</label>
+  <input type="text" name="serie" inputmode="numeric" pattern="[0-9]*">
+  <br />
+  <label for="serial">Pasaporte:</label>
   <.live_file_input upload={@uploads.passport} />
   <br />
   <button
@@ -16,7 +20,7 @@
   <%!-- render each avatar entry --%>
   <%= for entry <- @uploads.passport.entries do %>
     <article class="upload-entry">
-      <figure>
+      <figure width="50%">
         <.live_img_preview entry={entry} />
         <figcaption><%= entry.client_name %></figcaption>
       </figure>
