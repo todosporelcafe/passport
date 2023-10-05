@@ -5,6 +5,7 @@ defmodule Passport.Repo.Migrations.CreatePhysicalDocuments do
     create table(:physical_documents, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :identifier, :string
+      add :img_url, :string
       add :user_id, references(:users, on_delete: :nothing, type: :binary_id)
 
       timestamps()

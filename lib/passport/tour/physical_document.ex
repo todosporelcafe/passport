@@ -6,6 +6,7 @@ defmodule Passport.Tour.PhysicalDocument do
   @foreign_key_type :binary_id
   schema "physical_documents" do
     field :identifier, :string
+    field :img_url, :string
 
     belongs_to :user, Passport.Accounts.User
 
@@ -21,8 +22,8 @@ defmodule Passport.Tour.PhysicalDocument do
   @doc false
   def changeset(physical_document, attrs) do
     physical_document
-    |> cast(attrs, [:identifier])
-    |> validate_required([:identifier])
+    |> cast(attrs, [:identifier, :img_url])
+    |> validate_required([:identifier, :img_url])
     |> validate_format(:identifier, ~r/^\d{6}$/)
     |> assoc_constraint(:user)
   end
