@@ -32,13 +32,15 @@ defmodule PassportWeb.ProfileLive.Index do
     |> Accounts.create_profile(profile_params)
     |> case do
       {:ok, _profile} ->
-        info = "We've update your profile"
-        {:noreply, socket |> put_flash(:info, info) |> redirect(to: ~p"/specialty_bars")}
+        info = "Your profile is updated"
+
+        socket =
+          socket |> put_flash(:info, info) |> push_navigate(to: "/specialty_bars")
+
+        {:noreply, socket}
 
       {:error, changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}
     end
-
-    {:noreply, socket}
   end
 end
