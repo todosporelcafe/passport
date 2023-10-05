@@ -42,7 +42,8 @@ defmodule Passport.TourFixtures do
     {:ok, physical_document} =
       attrs
       |> Enum.into(%{
-        identifier: "some identifier"
+        identifier: "999999",
+        img_url: "https://s3.amazonaws.com/bucket/file.jpg"
       })
       |> Passport.Tour.create_physical_document()
 

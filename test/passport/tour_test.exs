@@ -187,12 +187,12 @@ defmodule Passport.TourTest do
     end
 
     test "create_physical_document/1 with valid data creates a physical_document" do
-      valid_attrs = %{identifier: "some identifier"}
+      valid_attrs = %{identifier: "000000", img_url: "https://s3.amazonaws.com/bucket/file.jpg"}
 
       assert {:ok, %PhysicalDocument{} = physical_document} =
                Tour.create_physical_document(valid_attrs)
 
-      assert physical_document.identifier == "some identifier"
+      assert physical_document.identifier == "000000"
     end
 
     test "create_physical_document/1 with invalid data returns error changeset" do
@@ -201,12 +201,12 @@ defmodule Passport.TourTest do
 
     test "update_physical_document/2 with valid data updates the physical_document" do
       physical_document = physical_document_fixture()
-      update_attrs = %{identifier: "some updated identifier"}
+      update_attrs = %{identifier: "000000"}
 
       assert {:ok, %PhysicalDocument{} = physical_document} =
                Tour.update_physical_document(physical_document, update_attrs)
 
-      assert physical_document.identifier == "some updated identifier"
+      assert physical_document.identifier == "000000"
     end
 
     test "update_physical_document/2 with invalid data returns error changeset" do
