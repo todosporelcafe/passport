@@ -2,6 +2,7 @@ defmodule PassportWeb.PassportLive.Index do
   use PassportWeb, :live_view
   alias Passport.Tour
   alias Passport.Tour.PhysicalDocument
+  alias Phoenix.LiveView.UploadEntry
 
   def mount(_params, _session, socket) do
     changeset = Tour.change_physical_document(%PhysicalDocument{})
@@ -25,21 +26,33 @@ defmodule PassportWeb.PassportLive.Index do
     {:noreply, cancel_upload(socket, :passport, ref)}
   end
 
-  def handle_event("save", _params, socket) do
-    _uploaded_files =
-      consume_uploaded_entries(socket, :passport, fn %{path: path},
-                                                     %Phoenix.LiveView.UploadEntry{
-                                                       client_name: client_name
-                                                     } ->
-        dest = Path.join([:code.priv_dir(:passport), "static", "uploads", client_name])
-        # The `static/uploads` directory must exist for `File.cp!/2`
-        # and MyAppWeb.static_paths/0 should contain uploads to work,.
+  def handle_event("save", %{"physical_document" => physical_document_params}, socket) do
+    consume_uploaded_entries(socket, :passport, fn %{path: path}, %UploadEntry{} = entry ->
+      path
+      |> Tour.upload_physical_document(entry.client_name)
+      |> case do
+        {:error, error, reason} -> {:postpone, %{error: error, reason: reason}}
+        result -> result
+      end
+    end)
+    |> IO.inspect()
+    |> List.first()
+    |> case do
+      %{location: location} = _passport_photo ->
+        changeset =
+          %PhysicalDocument{}
+          |> Tour.change_physical_document(Map.put(physical_document_params, "img_url", location))
 
-        File.cp!(path, dest)
-        {:ok, "/uploads/#{dest}"}
-      end)
+        {:noreply, assign(socket, :form, to_form(changeset))}
 
-    {:noreply, socket}
+      %{error: _error, reason: _reason} ->
+        changeset =
+          %PhysicalDocument{}
+          |> Tour.change_physical_document(physical_document_params)
+          |> Map.put(:action, :validate)
+
+        {:noreply, assign(socket, :form, to_form(changeset))}
+    end
   end
 
   def error_to_string(:too_large), do: "Too large"

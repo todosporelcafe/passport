@@ -297,7 +297,7 @@ defmodule Passport.Tour do
   end
 
   def upload_physical_document(path, filename) do
-    file = to_string(Mix.env()) <> "/" <> filename
+    file = to_string(Mix.env()) <> "\/" <> filename
 
     path
     |> ExAws.S3.Upload.stream_file()
