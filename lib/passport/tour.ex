@@ -104,6 +104,8 @@ defmodule Passport.Tour do
 
   alias Passport.Tour.Checkin
 
+  @bucket_name "passports.todosporelcafe.com"
+
   @doc """
   Returns the list of checkins.
 
@@ -292,5 +294,21 @@ defmodule Passport.Tour do
   """
   def change_physical_document(%PhysicalDocument{} = physical_document, attrs \\ %{}) do
     PhysicalDocument.changeset(physical_document, attrs)
+  end
+
+  def upload_physical_document(path, filename) do
+    file = to_string(Mix.env()) <> "/" <> filename
+
+    path
+    |> ExAws.S3.Upload.stream_file()
+    |> ExAws.S3.upload(@bucket_name, file)
+    |> ExAws.request()
+    |> case do
+      {:ok, %{body: body, headers: _headers, status_code: 200}} ->
+        {:ok, body}
+
+      {:error, {error, _status_code, result}} ->
+        {:error, error, result.body}
+    end
   end
 end
