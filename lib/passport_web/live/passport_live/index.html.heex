@@ -2,56 +2,34 @@
   Pasaporte de <b><%= @current_user.email %></b>
 </.header>
 
-<.simple_form for={@form} id="physical-documen-form" phx-change="validate" phx-submit="validate">
-  <.input type="text" field={@form[:serie]} label="Serie" inputmode="numeric" pattern="[0-9]*" />
-  <.input type="text" field={@form[:img_url]} label="img url" />
-</.simple_form>
-<form id="upload-form" phx-submit="save" phx-change="validate">
-  <label for="serial">Serie:</label>
-  <input type="text" name="serie" inputmode="numeric" pattern="[0-9]*">
-  <br />
-  <label for="serial">Pasaporte:</label>
+<.simple_form for={@form} phx-change="validate" phx-submit="save">
+  <.input type="text" field={@form[:identifier]} label="Serie" inputmode="numeric" pattern="[0-9]*" />
   <.live_file_input upload={@uploads.passport} />
-  <br />
-  <button
-    type="submit"
-    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-  >
-    Upload
-  </button>
-</form>
-
-<%!-- use phx-drop-target with the upload ref to enable file drag and drop --%>
+  <.input type="text" field={@form[:img_url]} label="Image URL" />
+  <:actions>
+    <.button phx-disable-with="Saving...">Add Passport to this user...</.button>
+  </:actions>
+</.simple_form>
+<br>
+<hr/>
+<br>
 <section phx-drop-target={@uploads.passport.ref}>
-  <%!-- render each avatar entry --%>
   <%= for entry <- @uploads.passport.entries do %>
     <article class="upload-entry">
-      <figure width="50%">
+      <figure width="30%">
         <.live_img_preview entry={entry} />
         <figcaption><%= entry.client_name %></figcaption>
       </figure>
-
-      <%!-- entry.progress will update automatically for in-flight entries --%>
       <progress value={entry.progress} max="100"><%= entry.progress %>%</progress>
-
-      <%!-- a regular click event whose handler will invoke Phoenix.LiveView.cancel_upload/3 --%>
-      <button
-        type="button"
-        phx-click="cancel-upload"
-        phx-value-ref={entry.ref}
-        aria-label="cancel"
-      >
+      <button type="button" phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">
         &times;
       </button>
-
-      <%!-- Phoenix.Component.upload_errors/2 returns a list of error atoms --%>
       <%= for err <- upload_errors(@uploads.passport, entry) do %>
         <p class="alert alert-danger"><%= error_to_string(err) %></p>
       <% end %>
     </article>
   <% end %>
 
-  <%!-- Phoenix.Component.upload_errors/1 returns a list of error atoms --%>
   <%= for err <- upload_errors(@uploads.passport) do %>
     <p class="alert alert-danger"><%= error_to_string(err) %></p>
   <% end %>
