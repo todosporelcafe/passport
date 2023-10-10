@@ -9,6 +9,7 @@ defmodule PassportWeb.PassportLive.Index do
 
     {:ok,
      socket
+     |> assign(:upload_class, "")
      |> assign_form(changeset)
      |> allow_upload(:passport, accept: ~w(.jpg .jpeg .png), max_entries: 1)}
   end
@@ -19,10 +20,23 @@ defmodule PassportWeb.PassportLive.Index do
       |> Tour.change_physical_document(physical_document_params)
       |> Map.put(:action, :validate)
 
-    {:noreply, assign_form(socket, physical_document_changeset)}
+    socket =
+      socket.assigns.uploads.passport.entries
+      |> Enum.empty?()
+      |> case do
+        true -> socket
+        false -> assign(socket, :upload_class, "invisible")
+      end
+      |> assign_form(physical_document_changeset)
+
+    {:noreply, socket}
   end
 
   def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    socket =
+      socket
+      |> assign(:upload_class, "")
+
     {:noreply, cancel_upload(socket, :passport, ref)}
   end
 
