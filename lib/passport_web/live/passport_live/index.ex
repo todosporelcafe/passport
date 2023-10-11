@@ -49,15 +49,40 @@ defmodule PassportWeb.PassportLive.Index do
         result -> result
       end
     end)
-    |> IO.inspect()
     |> List.first()
     |> case do
-      %{location: location} = _passport_photo ->
-        changeset =
-          %PhysicalDocument{}
-          |> Tour.change_physical_document(Map.put(physical_document_params, "img_url", location))
+      nil ->
+        physical_document_params
+        |> Tour.create_physical_document()
+        |> case do
+          {:ok, _physical_document} ->
+            socket =
+              socket
+              |> put_flash(:info, "Passport added")
+              |> redirect(to: ~p"/my_profile")
 
-        {:noreply, assign(socket, :form, to_form(changeset))}
+            {:noreply, socket}
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            {:noreply, assign(socket, form: to_form(changeset))}
+        end
+
+      %{location: location} = _passport_photo ->
+        physical_document_params
+        |> Map.put("img_url", location)
+        |> Tour.create_physical_document()
+        |> case do
+          {:ok, _physical_document} ->
+            socket =
+              socket
+              |> put_flash(:info, "Passport added")
+              |> redirect(to: ~p"/my_profile")
+
+            {:noreply, socket}
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            {:noreply, assign(socket, form: to_form(changeset))}
+        end
 
       %{error: _error, reason: _reason} ->
         changeset =
