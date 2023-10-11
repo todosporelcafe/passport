@@ -37,3 +37,7 @@
     <p class="alert alert-danger"><%= error_to_string(err) %></p>
   <% end %>
 </section>
+
+<%= if @form[:img_url].value do %>
+  <img src={@form[:img_url].value} alt="passport">
+<% end %>
