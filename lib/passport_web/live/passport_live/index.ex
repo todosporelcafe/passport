@@ -52,8 +52,8 @@ defmodule PassportWeb.PassportLive.Index do
     |> List.first()
     |> case do
       nil ->
-        physical_document_params
-        |> Tour.create_physical_document()
+        socket.assigns.current_user
+        |> Tour.create_physical_document(physical_document_params)
         |> case do
           {:ok, _physical_document} ->
             socket =
@@ -68,15 +68,14 @@ defmodule PassportWeb.PassportLive.Index do
         end
 
       %{location: location} = _passport_photo ->
-        physical_document_params
-        |> Map.put("img_url", location)
-        |> Tour.create_physical_document()
+        socket.assigns.current_user
+        |> Tour.create_physical_document(Map.put(physical_document_params, "img_url", location))
         |> case do
           {:ok, _physical_document} ->
             socket =
               socket
               |> put_flash(:info, "Passport added")
-              |> redirect(to: ~p"/my_profile")
+              |> redirect(to: ~p"/users/settings")
 
             {:noreply, socket}
 
@@ -86,7 +85,7 @@ defmodule PassportWeb.PassportLive.Index do
 
       %{error: _error, reason: _reason} ->
         changeset =
-          %PhysicalDocument{}
+          socket.assigns.current_user
           |> Tour.change_physical_document(physical_document_params)
           |> Map.put(:action, :validate)
 
