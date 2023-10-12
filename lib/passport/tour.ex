@@ -243,9 +243,9 @@ defmodule Passport.Tour do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_physical_document(attrs \\ %{}) do
-    %PhysicalDocument{}
-    |> PhysicalDocument.changeset(attrs)
+  def create_physical_document(user, attrs \\ %{}) do
+    user
+    |> PhysicalDocument.physical_document_registration_changeset(attrs)
     |> Repo.insert()
   end
 
