@@ -15,14 +15,14 @@ defmodule Passport.Tour.PhysicalDocument do
 
   def physical_document_registration_changeset(user, attrs) do
     user
-    |> Ecto.build_assoc(:physical_documents)
+    |> Ecto.build_assoc(:physical_document)
     |> changeset(attrs)
   end
 
   @doc false
   def changeset(physical_document, attrs) do
     physical_document
-    |> cast(attrs, [:identifier, :img_url])
+    |> cast(attrs, [:identifier, :img_url, :user_id])
     |> validate_required([:identifier, :img_url])
     |> validate_format(:identifier, ~r/^\d{6}$/)
     |> assoc_constraint(:user)
