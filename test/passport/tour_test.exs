@@ -172,35 +172,40 @@ defmodule Passport.TourTest do
   describe "physical_documents" do
     alias Passport.Tour.PhysicalDocument
 
+    import Passport.AccountsFixtures
     import Passport.TourFixtures
 
     @invalid_attrs %{identifier: nil}
 
-    test "list_physical_documents/0 returns all physical_documents" do
-      physical_document = physical_document_fixture()
+    setup do
+      %{user: user_fixture()}
+    end
+
+    test "list_physical_documents/0 returns all physical_documents", %{user: user} do
+      physical_document = physical_document_fixture(user)
       assert Tour.list_physical_documents() == [physical_document]
     end
 
-    test "get_physical_document!/1 returns the physical_document with given id" do
-      physical_document = physical_document_fixture()
+    test "get_physical_document!/1 returns the physical_document with given id", %{user: user} do
+      physical_document = physical_document_fixture(user)
       assert Tour.get_physical_document!(physical_document.id) == physical_document
     end
 
-    test "create_physical_document/1 with valid data creates a physical_document" do
+    test "create_physical_document/1 with valid data creates a physical_document", %{user: user} do
       valid_attrs = %{identifier: "000000", img_url: "https://s3.amazonaws.com/bucket/file.jpg"}
 
       assert {:ok, %PhysicalDocument{} = physical_document} =
-               Tour.create_physical_document(valid_attrs)
+               Tour.create_physical_document(user, valid_attrs)
 
       assert physical_document.identifier == "000000"
     end
 
-    test "create_physical_document/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Tour.create_physical_document(@invalid_attrs)
+    test "create_physical_document/1 with invalid data returns error changeset", %{user: user} do
+      assert {:error, %Ecto.Changeset{}} = Tour.create_physical_document(user, @invalid_attrs)
     end
 
-    test "update_physical_document/2 with valid data updates the physical_document" do
-      physical_document = physical_document_fixture()
+    test "update_physical_document/2 with valid data updates the physical_document", %{user: user} do
+      physical_document = physical_document_fixture(user)
       update_attrs = %{identifier: "000000"}
 
       assert {:ok, %PhysicalDocument{} = physical_document} =
@@ -209,8 +214,8 @@ defmodule Passport.TourTest do
       assert physical_document.identifier == "000000"
     end
 
-    test "update_physical_document/2 with invalid data returns error changeset" do
-      physical_document = physical_document_fixture()
+    test "update_physical_document/2 with invalid data returns error changeset", %{user: user} do
+      physical_document = physical_document_fixture(user)
 
       assert {:error, %Ecto.Changeset{}} =
                Tour.update_physical_document(physical_document, @invalid_attrs)
@@ -218,8 +223,8 @@ defmodule Passport.TourTest do
       assert physical_document == Tour.get_physical_document!(physical_document.id)
     end
 
-    test "delete_physical_document/1 deletes the physical_document" do
-      physical_document = physical_document_fixture()
+    test "delete_physical_document/1 deletes the physical_document", %{user: user} do
+      physical_document = physical_document_fixture(user)
       assert {:ok, %PhysicalDocument{}} = Tour.delete_physical_document(physical_document)
 
       assert_raise Ecto.NoResultsError, fn ->
@@ -227,8 +232,8 @@ defmodule Passport.TourTest do
       end
     end
 
-    test "change_physical_document/1 returns a physical_document changeset" do
-      physical_document = physical_document_fixture()
+    test "change_physical_document/1 returns a physical_document changeset", %{user: user} do
+      physical_document = physical_document_fixture(user)
       assert %Ecto.Changeset{} = Tour.change_physical_document(physical_document)
     end
   end
