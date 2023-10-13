@@ -38,14 +38,17 @@ defmodule Passport.TourFixtures do
   @doc """
   Generate a physical_document.
   """
-  def physical_document_fixture(attrs \\ %{}) do
-    {:ok, physical_document} =
+  def physical_document_fixture(user, attrs \\ %{}) do
+    attrs =
       attrs
       |> Enum.into(%{
         identifier: "999999",
         img_url: "https://s3.amazonaws.com/bucket/file.jpg"
       })
-      |> Passport.Tour.create_physical_document()
+
+    {:ok, physical_document} =
+      user
+      |> Passport.Tour.create_physical_document(attrs)
 
     physical_document
   end
