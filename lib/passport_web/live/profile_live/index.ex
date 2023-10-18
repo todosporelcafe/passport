@@ -6,8 +6,12 @@ defmodule PassportWeb.ProfileLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    user =
+      socket.assigns.current_user.email
+      |> Accounts.get_user_by_email()
+
     changeset = Accounts.change_profile(%Profile{})
-    {:ok, assign(socket, :form, to_form(changeset))}
+    {:ok, assign(socket, form: to_form(changeset), user: user)}
   end
 
   @impl true
