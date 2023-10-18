@@ -2,6 +2,31 @@
   My profile
 </.header>
 
+<%= if @user.profile do %>
+<h2>Profile</h2>
+<dl>
+  <dt>Full Name</dt>
+  <dd><%= @user.profile.name %> <%= @user.profile.last_name %></dd>
+  <dt>Phone number</dt>
+  <dd><%= @user.profile.phone_number %></dd>
+  <dt>Zip code</dt>
+  <dd><%= @user.profile.zip_code %></dd>
+  <dt>Born date</dt>
+  <dd><%= @user.profile.born_date %></dd>
+</dl>
+<% end %>
+
+<%= if @user.physical_document do %>
+<h2>Passport</h2>
+<dl>
+  <dt>Identifier</dt>
+  <dd><%= @user.physical_document.identifier %></dd>
+  <dt>Document</dt>
+  <dd><img src={"#{@user.physical_document.img_url}"} width="50%" /></dd>
+</dl>
+<% end %>
+
+
 <.simple_form for={@form} id="profile-form" phx-change="validate" phx-submit="save">
   <.input field={@form[:name]} type="text" label="Name" />
   <.input field={@form[:last_name]} type="text" label="Last name" />
