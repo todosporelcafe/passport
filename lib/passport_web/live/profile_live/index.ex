@@ -10,7 +10,13 @@ defmodule PassportWeb.ProfileLive.Index do
       socket.assigns.current_user.email
       |> Accounts.get_user_by_email()
 
-    changeset = Accounts.change_profile(%Profile{})
+    changeset =
+      case user.profile do
+        nil -> %Profile{}
+        profile -> profile
+      end
+      |> Accounts.change_profile()
+
     {:ok, assign(socket, form: to_form(changeset), user: user)}
   end
 
