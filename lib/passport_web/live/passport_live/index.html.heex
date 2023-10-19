@@ -3,7 +3,13 @@
 </.header>
 
 <.simple_form for={@form} phx-change="validate" phx-submit="save">
-  <.input type="text" field={@form[:identifier]} label="Serie" inputmode="numeric" pattern="[0-9]*" />
+  <.input
+    type="text"
+    field={@form[:identifier]}
+    label="Serie"
+    inputmode="numeric"
+    pattern="[0-9]*"
+  />
 
   <div class={@upload_class}>
     <.live_file_input upload={@uploads.passport} />
@@ -12,9 +18,9 @@
     <.button phx-disable-with="Saving...">Add Passport to this user...</.button>
   </:actions>
 </.simple_form>
-<br>
-<hr/>
-<br>
+<br />
+<hr />
+<br />
 <section phx-drop-target={@uploads.passport.ref}>
   <%= for entry <- @uploads.passport.entries do %>
     <article class="upload-entry">
@@ -23,7 +29,12 @@
         <figcaption><%= entry.client_name %></figcaption>
       </figure>
       <progress value={entry.progress} max="100"><%= entry.progress %>%</progress>
-      <button type="button" phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">
+      <button
+        type="button"
+        phx-click="cancel-upload"
+        phx-value-ref={entry.ref}
+        aria-label="cancel"
+      >
         &times;
       </button>
       <%= for err <- upload_errors(@uploads.passport, entry) do %>
@@ -38,5 +49,5 @@
 </section>
 
 <%= if @form[:img_url].value do %>
-  <img src={@form[:img_url].value} alt="passport">
+  <img src={@form[:img_url].value} alt="passport" />
 <% end %>
