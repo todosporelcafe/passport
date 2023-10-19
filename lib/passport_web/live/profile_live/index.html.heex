@@ -21,6 +21,7 @@
   <dl>
     <dt>Identifier</dt>
     <dd><%= @user.physic,tt.identifier %></dd>
+    <dd><%= @user.physical_document.identifier %></dd>
     <dt>Document</dt>
     <dd><img src={"#{@user.physical_document.img_url}"} width="50%" /></dd>
   </dl>
